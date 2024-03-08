@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Profile</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../static/css/style_profile.css">
+    <link rel="icon" type="image/png" href="../static/images/favicon.ico">
+    <!-- font awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0-->
+</head>
+<body>
+
+<div class="bg">
+    <div class="overlay">
+        <div class="profile-container">
+            <h2 class="text-center">Manage Profile</h2>
+            <form id="manageProfileForm">
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" class="form-control" id="email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">New Password</label>
+                    <input type="password" class="form-control" id="password" name="password" placeholder="Leave blank to keep the current">
+                </div>
+                <div class="form-group">
+                    <label for="firstName">First Name</label>
+                    <input type="text" class="form-control" id="firstName" name="firstName" required>
+                </div>
+                <div class="form-group">
+                    <label for="lastName">Last Name</label>
+                    <input type="text" class="form-control" id="lastName" name="lastName" required>
+                </div>
+                <button type="submit" class="btn btn-custom w-100">Update Profile</button>
+            </form>
+            <!-- Profile Information Display -->
+        <div class="profile-container profile-info">
+            <h2 class="text-center">My Profile</h2>
+            <p><strong>Email:</strong> <span id="userEmail">user@example.com</span></p>
+            <p><strong>First Name:</strong> <span id="userFirstName">John</span></p>
+            <p><strong>Last Name:</strong> <span id="userLastName">Doe</span></p>
+            <button id="editProfileButton" class="btn btn-custom">Edit Profile</button>
+        </div>
+        <!-- Edit Profile Form -->
+        <div class="profile-container edit-profile-form">
+            <h2 class="text-center">Edit Profile</h2>
+            <!-- Form contents from previous example -->
+        </div>
+        
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap JS and dependencies -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapc

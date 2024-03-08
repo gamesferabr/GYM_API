@@ -1,0 +1,45 @@
+body, html {
+    height: 100%;
+    margin: 0;
+}
+
+.bg {
+    background-image: url('images/fitnessapp.webp'); /* Adjust as necessary */
+    height: 100%;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.overlay {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.5); /* Black background with opacity */
+}
+
+.profile-container {
+    background-color: white;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 600px;
+}
+
+.btn-custom {
+    background-color: #86bb71; /* Green color that matches the theme */
+    border-color: #86bb71;
+    color: white;
+}
+
+.btn-custom:hover {
+    background-color: #729c5f;
+    border-color: #729c5f;
+}
+.profile-info, .edit-profile-form {
+    display: none; /* Initially hide the edit form */
+}

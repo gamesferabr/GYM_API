@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Diets</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../static/css/style_diets.css">
+    <link rel="icon" type="image/png" href="../static/images/favicon.ico">
+    <!-- font awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0-->
+</head>
+<body>
+
+<div class="bg">
+    <div class="overlay">
+        <!-- Container for dynamically loaded diets -->
+        <div class="content-container diets-container">
+            <h2 class="text-center">Your Diets</h2>
+            <!-- Diets will be inserted here by the script -->
+        </div>
+
+        <!-- Form to add a new diet -->
+        <div class="content-container">
+            <h2 class="text-center">Add New Diet</h2>
+            <form id="addDietForm">
+                <div class="form-group">
+                    <label for="name">Diet Name</label>
+                    <input type="text" class="form-control" id="name" name="name" required>
+                </div>
+                <div class="form-group">
+                    <label for="description">Description (Optional)</label>
+                    <textarea class="form-control" id="description" name="description"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="date">Date</label>
+                    <input type="date" class="form-control" id="date" name="date" required>
+                </div>
+                <button type="submit" class="btn btn-custom w-100">Add Diet</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap JS and dependency (jQuery & Popper.js) -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootst
