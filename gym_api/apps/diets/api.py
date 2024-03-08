@@ -25,7 +25,7 @@ def search_diets(request:HttpRequest, query: str):
 
 @router.get("/", response=List[DietOut], auth=is_auth_ninja)
 def list_diets(request:HttpRequest):
-    token = request.COOKIES.get("refresh_token")
+    token = request.COOKIES.get("access_token")
     user = get_user_for_tokens(token)
     
     diets = Diet.objects.filter(user=user)
@@ -34,7 +34,7 @@ def list_diets(request:HttpRequest):
 
 @router.put("/{diet_id}", response=DietOut,auth=is_auth_ninja)
 def update_diet(request:HttpRequest, diet_id: int, data: DietIn):
-    token = request.COOKIES.get("refresh_token")
+    token = request.COOKIES.get("access_token")
     user = get_user_for_tokens(token)
     
     diet = Diet.objects.filter(id=diet_id, user=user).first()
@@ -46,7 +46,7 @@ def update_diet(request:HttpRequest, diet_id: int, data: DietIn):
 
 @router.delete("/{diet_id}",auth=is_auth_ninja)
 def delete_diet(request:HttpRequest, diet_id: int):
-    token = request.COOKIES.get("refresh_token")
+    token = request.COOKIES.get("access_token")
     user = get_user_for_tokens(token)
     
     diet = Diet.objects.filter(id=diet_id, user=user)
@@ -57,7 +57,7 @@ def delete_diet(request:HttpRequest, diet_id: int):
 @router.get("/{diet_id}",response=DietOut, auth=is_auth_ninja)
 def get_diet(request:HttpRequest, diet_id:int = Path(...)):
     try:    
-        token = request.COOKIES.get("refresh_token")
+        token = request.COOKIES.get("access_token")
         user = get_user_for_tokens(token)
     
         diet = Diet.objects.get(id= diet_id, user = user)

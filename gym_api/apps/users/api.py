@@ -28,6 +28,8 @@ def login(request:HttpRequest, auth: AuthSchema):
         tokens = get_tokens_for_user(user)
         
         response = JsonResponse({"success": True, "message": "Login successful.", "data": tokens}, status=200)
+        
+        response.set_cookie(key='access_token', value= tokens['access'], httponly=True)
         response.set_cookie(key='refresh_token', value=tokens['refresh'], httponly=True)
         
         return response
@@ -41,15 +43,30 @@ def login(request:HttpRequest, auth: AuthSchema):
 def logout(request: HttpRequest):
     try:
         # Aqui, acessamos diretamente os cookies da solicitação recebida
+        access_token = request.COOKIES.get('access_token')
         refresh_token = request.COOKIES.get('refresh_token')
         
-        if refresh_token is None:
+        if access_token is None:
             return JsonResponse({"error": "No refresh token provided."}, status=400)
 
         # Com o token de refresh obtido, podemos tentar invalidá-lo
         RefreshToken(refresh_token).blacklist()
+        
         response = JsonResponse({"success": True, "message": "Logout successful."}, status=200)
-        response.delete_cookie('refresh_token')  # Opcionalmente, remove o cookie
+        response.delete_cookie('access_token')  # Opcionalmente, remove o cookie
+        response.delete_cookie('refresh_token')
+        
         return response
     except Exception as e:
         return JsonResponse({"error": "Invalid token or other error."}, status=400)
+
+@router.post('/dashboard',auth=is_auth_ninja,response={200:None})
+def dashboard(request: HttpRequest):
+    try:
+        token = request.COOKIES.get("access_token")
+        response = JsonResponse({"success":True, "message": "Dashboard successful", "token":token}, status = 200)
+        
+        return response
+    
+    except Exception as e:
+        return({"error":"Invalid token"})

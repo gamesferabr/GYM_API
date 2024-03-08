@@ -10,7 +10,7 @@ router = Router()
 
 @router.post("/add", response=WorkoutOut, auth=is_auth_ninja)
 def add_workout(request:HttpRequest, workout_in: WorkoutIn):
-    token = request.COOKIES.get("refresh_token")
+    token = request.COOKIES.get("access_token")
     user = get_user_for_tokens(token)
     
     workout = Workout.objects.create(**workout_in.dict(), user=user)
@@ -19,7 +19,7 @@ def add_workout(request:HttpRequest, workout_in: WorkoutIn):
 
 @router.get("/", response=List[WorkoutOut], auth = is_auth_ninja)
 def list_workouts(request:HttpRequest):
-    token = request.COOKIES.get("refresh_token")
+    token = request.COOKIES.get("access_token")
     user = get_user_for_tokens(token)
     
     workouts = Workout.objects.filter(user=user)
@@ -28,7 +28,7 @@ def list_workouts(request:HttpRequest):
 
 @router.put("/{workout_id}", response=WorkoutOut, auth= is_auth_ninja)
 def update_workout(request:HttpRequest, workout_id: int, data: WorkoutIn):
-    token = request.COOKIES.get("refresh_token")
+    token = request.COOKIES.get("access_token")
     user = get_user_for_tokens(token)
     
     workout = Workout.objects.filter(id=workout_id, user=user).first()
@@ -40,7 +40,10 @@ def update_workout(request:HttpRequest, workout_id: int, data: WorkoutIn):
 
 @router.delete("/{workout_id}", auth=is_auth_ninja)
 def delete_workout(request:HttpRequest, workout_id: int):
-    workout = Workout.objects.filter(id=workout_id, user=request.auth)
+    token = request.COOKIES.get("access_token")
+    user = get_user_for_tokens(token)
+    
+    workout = Workout.objects.filter(id=workout_id, user=user)
     workout.delete()
     return {"success": True}
 
@@ -48,7 +51,7 @@ def delete_workout(request:HttpRequest, workout_id: int):
 @router.get("/{workout_id}", response=WorkoutOut,auth=is_auth_ninja)
 def get_workout(request:HttpRequest, workout_id: int = Path(...)):
     try:
-        token = request.COOKIES.get("refresh_token")
+        token = request.COOKIES.get("access_token")
         user = get_user_for_tokens(token)
     
         workout = Workout.objects.get(id=workout_id, user=user)
