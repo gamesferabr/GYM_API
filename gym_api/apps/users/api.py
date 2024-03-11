@@ -60,12 +60,18 @@ def login(request: HttpRequest, auth: AuthSchema):
         # Se a autenticação for bem-sucedida, gera os tokens
         tokens = get_tokens_for_user(user)
 
-        response = JsonResponse({"success": True, "message": "Login successful.", "data": tokens}, status=200)
+        # Pegar o first Name do usuário
+        first_name = CustomUser.objects.filter(
+            email=auth.email
+        ).values('first_name')
+        
+        first_name = first_name[0]['first_name']
+                
+        response = JsonResponse({"success": True, "message": "Login successful.", "data": tokens, "username":first_name}, status=200)
         
         # Configura os cookies com os tokens
         response.set_cookie(key='access_token', value=tokens['access'], httponly=True, samesite='Lax')  
-        response.set_cookie(key='refresh_token', value=tokens['refresh'], httponly=True, samesite='Lax')
-
+       
         return response
 
     except ValidationError as e:

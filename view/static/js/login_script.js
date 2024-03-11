@@ -6,6 +6,8 @@ document.getElementById('loginForm').addEventListener('submit', async function(e
     let errorMessageDiv = document.getElementById('errorMessage');
 
     if(ok){
+        // Armazenar o first_name e tokens no localStorage
+        localStorage.setItem('username', data.username); // Armazenando o first_name como 'username'
         window.location.href = 'dashboard.html';
     }
     else {

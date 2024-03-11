@@ -1,7 +1,13 @@
 
 
 document.addEventListener("DOMContentLoaded", function() {
+    let username = localStorage.getItem('username');
+    if (username) {
+        document.getElementById('username').textContent = ', '+username; // Certifique-se de ter um elemento com id="username" no seu HTML
+    }
+
     let accessToken = localStorage.getItem('access_token');
+    
     if (!accessToken) {
         window.location.href = 'login.html';
 
@@ -25,6 +31,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
 async function validateToken(token) {
     try {
+        
         let response = await fetch('http://localhost:8000/api/users/dashboard', {
             method: 'POST',
             headers: {
@@ -45,28 +52,25 @@ async function validateToken(token) {
     }
 }
 
-document.getElementById("logoutButton").addEventListener('submit', async function(event){
-    let accessToken = localStorage.getItem('access_token');
+document.getElementById("logoutForm").addEventListener('submit', async function(event){
+    event.preventDefault();
+    let token = localStorage.getItem('access_token');
     
-    let response = await logoutresponse(accessToken);
-        
-    if (response.success){
-        window.location.href = 'index.html';
-    }
-    else{
-        throw new Error('Falha ao realizar logout');
-    }
-
-})
-
-async function logoutresponse(token){
-    let response = await fetch('http://localhost:8000/api/users/logout',{
-        method:'POST',
+    await fetch('http://localhost:8000/api/users/logout', {
+        method: 'POST',
         headers: {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${token}`
         }
-    });
 
-    return response
-}
+    }).then(response => {
+        if(response) {
+            // Redireciona para a página de login após o logout bem-sucedido
+            window.location.href = 'login.html';
+        } else {
+            console.error('Falha ao realizar logout');
+        }
+    }).catch(error => {
+        console.error('Erro na request de logout:', error);
+    });
+});
