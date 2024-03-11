@@ -1,37 +1,51 @@
-document.getElementById('signupForm').addEventListener('submit', function(event) {
+document.getElementById('signupForm').addEventListener('submit', async function(event) {
     event.preventDefault(); // Prevenir o comportamento padrão de envio do formulário
 
-    // Chama a função de cadastro
-    let response = signup();
+    let { ok, data, status } = await signup();
 
-    if (response) {
-        // Redirecionar o usuário para a página de login
-        window.location.href = 'login.html';
-    } 
+    let errorMessageDiv = document.getElementById('errorMessage');
+
+    if (ok) {
+        window.location.href = 'login.html'; // Redirecionar para login se sucesso
+    } else {
+        // Se houver erro, mostrar a mensagem de erro
+        errorMessageDiv.style.display = 'block';
+
+        // A lógica aqui assume que o erro sempre vem no formato { detail: ... }
+        // Isso pode precisar de ajustes dependendo da consistência da resposta da sua API
+        if (data && Array.isArray(data.detail)) {
+            errorMessageDiv.innerHTML = data.detail.join('<br>');
+        } else if (data && data.detail) {
+            errorMessageDiv.innerHTML = data.detail;
+        } else {
+            // Mensagem genérica para outros casos, ajuste conforme necessário
+            errorMessageDiv.innerHTML = 'An unexpected error occurred.';
+        }
+    }
 });
 
 
-async function signup(){
+async function signup() {
     let email = document.getElementById('email').value;
     let password = document.getElementById('password').value;
     let firstName = document.getElementById('first_name').value;
     let lastName = document.getElementById('last_name').value;
-    
-    // Criar o objeto JSON a partir dos valores coletados
-     var userData = {
+
+    let userData = {
         email: email,
         password: password,
         first_name: firstName,
-        last_name: lastName
+        last_name: lastName,
     };
 
-    let response = await  fetch('http://localhost:8000/api/users/users', {
+    let response = await fetch('http://localhost:8000/api/users/users', {
         method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(userData),})
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(userData),
+    });
 
-        
-    return response.json(); 
+    // Aqui, independente do status, tentamos extrair o JSON
+    let data = await response.json().catch(() => null); // Isso evita erro caso o corpo não seja JSON
+
+    return { ok: response.ok, status: response.status, data: data };
 }

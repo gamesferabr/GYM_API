@@ -1,8 +1,10 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 from django.utils.translation import gettext_lazy as _
+import uuid
+from django.db import models
+from django.utils.timezone import now
 
-# Create your models here.
 class CustomUserManager(BaseUserManager):
     """
     Custom user model manager where email is the unique identifiers
@@ -35,9 +37,11 @@ class CustomUserManager(BaseUserManager):
         
         return self.create_user(email, password, **extra_fields)
     
-
+    
 class CustomUser(AbstractBaseUser, PermissionsMixin):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     email = models.EmailField(_('email address'), unique=True)
+    data_joined = models.DateTimeField(default=now)
     first_name = models.CharField(_('first name'), max_length=150, blank=True)
     last_name = models.CharField(_('last name'), max_length=150, blank=True)
     is_active = models.BooleanField(default=True)

@@ -1,26 +1,31 @@
-document.getElementById('loginForm').addEventListener('submit', async function(event){
+document.getElementById('loginForm').addEventListener('submit', async function(event) {
     event.preventDefault(); // Impede o comportamento padrão de envio do formulário
 
-    try {
-        let response = await login(); // Aguarda a função login completar
+    let { ok, data, status } = await login();
 
-        if (response.success) {
-            console.log(response); // Exemplo: { refresh_token: "...", access_token: "..." }
+    let errorMessageDiv = document.getElementById('errorMessage');
 
-            // Armazena os tokens conforme necessário, por exemplo, em localStorage
-            localStorage.setItem('access_token', response.tokens.data.access);
-            window.location.href = 'dashboard.html'; // Redireciona para o dashboard
+    if(ok){
+        window.location.href = 'dashboard.html';
+    }
+    else {
+        // Se houver erro, mostrar a mensagem de erro
+        errorMessageDiv.style.display = 'block';
 
-        } else {
-            // Trata o caso de login falho
-            console.error('Login failed:', response.error);
-            // Exibe uma mensagem de erro, se necessário
+        if(status == 401 || status == 422){
+            errorMessageDiv.innerHTML = 'Invalid credentials. Please try again.';
         }
-    } catch (error) {
-        console.error('Error during login:', error);
-        // Trata erros de rede ou de resposta do servidor
+
+        else if(status == 500){
+            errorMessageDiv.innerHTML = 'Internal server error. Please try again later.';
+        }
+
+        else{
+            errorMessageDiv.innerHTML = 'Unknown error. Please try again later.';
+        }
     }
 });
+
 
 async function login(){
     let email = document.getElementById('email').value;
@@ -31,8 +36,7 @@ async function login(){
         password: password
     };
 
-    try {
-        let response = await fetch('http://localhost:8000/api/users/login', {
+    let response = await fetch('http://localhost:8000/api/users/login', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -40,20 +44,7 @@ async function login(){
             body: JSON.stringify(userData),
         });
 
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
-        }
+    let data = await response.json(); // Converte a resposta para JSON
 
-        let data = await response.json(); // Converte a resposta para JSON
-        return {
-            success: true,
-            tokens: data // Supondo que a API retorne os tokens nesta etapa
-        };
-    } catch (error) {
-        console.error('Login error:', error);
-        return {
-            success: false,
-            error: error.toString()
-        };
-    }
+    return { ok: response.ok, status: response.status, data: data };
 }
