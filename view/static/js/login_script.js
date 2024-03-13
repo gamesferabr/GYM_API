@@ -10,6 +10,8 @@ document.getElementById('loginForm').addEventListener('submit', async function(e
         // localStorage.setItem('access_token', data.access); // Certifique-se de que esta é a chave correta
         localStorage.setItem('username', data.username); // Armazenando o first_name como 'username'
         localStorage.setItem('access_token', data.data.access);
+        localStorage.setItem('refresh_token', data.data.refresh);
+        
         window.location.href = 'dashboard.html';
     }
     else {

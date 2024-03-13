@@ -1,35 +1,20 @@
-"""
-URL configuration for gym_api project.
-
-The `urlpatterns` list routes URLs to views. For more information please see:
-    https://docs.djangoproject.com/en/5.0/topics/http/urls/
-Examples:
-Function views
-    1. Add an import:  from my_app import views
-    2. Add a URL to urlpatterns:  path('', views.home, name='home')
-Class-based views
-    1. Add an import:  from other_app.views import Home
-    2. Add a URL to urlpatterns:  path('', Home.as_view(), name='home')
-Including another URLconf
-    1. Import the include() function: from django.urls import include, path
-    2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
-"""
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 from ninja import NinjaAPI
 from apps.users.api import router as users_router
 from apps.workout.api import router as workouts_router
 from apps.diets.api import router as diets_router
+from apps.token.api import router as auth_router
 
-# Create your views here.
+# Cria uma instância do NinjaAPI e adiciona os routers
 api = NinjaAPI()
+api.add_router("/users/", users_router, tags=["Users"])
+api.add_router("/workouts/", workouts_router, tags=["Workouts"])
+api.add_router("/diets/", diets_router, tags=["Diets"])
+api.add_router('/auth/', auth_router, tags=["Token"])
 
-api.add_router("/users/", users_router, tags=["auth"])
-api.add_router("/workouts/", workouts_router, tags=["workouts"])
-api.add_router("/diets/", diets_router, tags=["diets"])
-
-# urls.py
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/', api.urls),
+    path('api/', api.urls),  # Inclui as rotas do NinjaAPI
+    
 ]

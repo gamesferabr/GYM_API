@@ -8,14 +8,17 @@ from apps.users.tokens import get_user_for_tokens
 
 router = Router()
 
-@router.post("/add", response=DietOut, auth=is_auth_ninja)
-def add_diet(request:HttpRequest, diet_in: DietIn):
-    token = request.COOKIES.get("refresh_token")
+@router.post("/add/{token}", response=DietOut, auth=is_auth_ninja)
+def add_diet(request:HttpRequest, diet_in: DietIn,token:str):
+        
     user = get_user_for_tokens(token)
     
-    diet = Diet.objects.create(**diet_in.dict(), user=user)
-    return diet
-
+    try:
+            diet = Diet.objects.create(**diet_in.dict(), user=user)
+            return diet
+    except Exception as e:
+            print(f"Error creating diet: {e}")
+            # Consider returning an error response here
 
 @router.get("/search", response=List[DietOut], auth=is_auth_ninja)
 def search_diets(request:HttpRequest, query: str):

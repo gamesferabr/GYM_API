@@ -1,5 +1,6 @@
 from ninja import Schema
 from datetime import date
+import uuid
 
 class DietIn(Schema):
     name: str
@@ -7,7 +8,7 @@ class DietIn(Schema):
     date: date
 
 class DietOut(Schema):
-    id: int
+    id: uuid.UUID  # Usando uuid.UUID aqui
     name: str
     description: str
     date: date
