@@ -100,8 +100,9 @@ async function validateToken(token) {
 
 // Lógica de procurar a dieta ao usuário
 $(document).ready(function() {
-    $('.add-food-btn').click(function() {
-        
+    $('.add-food-btn').click(async function() {
+        await checkAndRefreshToken();
+
         const mealType = $(this).data('meal');
         const queryInput = $(`#searchinput-${mealType}`);
 
@@ -160,7 +161,8 @@ $(document).ready(function() {
     
 
     //Lógica para adicionar a dieta ao banco de dados
-    $(document).ready(function() {
+    $(document).ready(async function() {
+        await checkAndRefreshToken();
 
         // Quando um botão é clicado para adicionar a dieta
         $('.addSelectedFoods').on('click', function() {
