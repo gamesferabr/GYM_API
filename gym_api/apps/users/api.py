@@ -1,4 +1,3 @@
-from django.contrib.auth.hashers import make_password
 from ninja import Router
 from .models import CustomUser
 from .schemas import UserCreateSchema, AuthSchema
@@ -71,17 +70,18 @@ def login(request: HttpRequest, auth: AuthSchema):
         
         # Configura os cookies com os tokens
         response.set_cookie(key='access_token', value=tokens['access'], httponly=True, samesite='Lax')  
-       
+        response.set_cookie(key='refresh_token', value=tokens['refresh'], httponly=True, samesite='Lax')
+        
         return response
 
     except ValidationError as e:
         # Captura erros de validação e retorna uma mensagem apropriada
         return JsonResponse({"detail": e.messages}, status=400)
     
-@router.post('/logout', auth=is_auth_ninja, response={200: None})
-def logout(request: HttpRequest):
+    
+@router.post('/logout/{access_token}', auth=is_auth_ninja, response={200: None})
+def logout(request: HttpRequest, access_token):
     try:
-        access_token = request.COOKIES.get('access_token')
         refresh_token = request.COOKIES.get('refresh_token')
         
         if access_token is None:
@@ -90,6 +90,7 @@ def logout(request: HttpRequest):
         RefreshToken(refresh_token).blacklist()
         
         response = JsonResponse({"success": True, "message": "Logout successful."}, status=200)
+        
         response.delete_cookie('access_token')
         response.delete_cookie('refresh_token')
         
@@ -99,14 +100,15 @@ def logout(request: HttpRequest):
         return JsonResponse({"error": "Invalid token or other error."}, status=400)
 
 
-@router.post('/dashboard',auth=is_auth_ninja,response={200:None})
-def dashboard(request: HttpRequest):
+@router.post('/dashboard/{token}',auth=is_auth_ninja, response={200:None})
+def dashboard(request: HttpRequest, token:str):
     try:
+        if token:
+            response = JsonResponse({"success":True, "message": "Dashboard successful"}, status = 200)
+            return response
         
-        token = request.COOKIES.get("access_token")
-        response = JsonResponse({"success":True, "message": "Dashboard successful", "token":token}, status = 200)
-        
-        return response
+        else:
+            return JsonResponse({"error":"No token provided."}, status=400)
     
     except Exception as e:
         return({"error":"Invalid token"})

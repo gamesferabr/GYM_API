@@ -1,7 +1,7 @@
-
-
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", function () {
+    
     let username = localStorage.getItem('username');
+    
     if (username) {
         document.getElementById('username').textContent = ', '+username; // Certifique-se de ter um elemento com id="username" no seu HTML
     }
@@ -15,16 +15,17 @@ document.addEventListener("DOMContentLoaded", function() {
         // Opcional: Valida o token com o servidor
         validateToken(accessToken).then(isValid => {
             if (!isValid) {
+                
                 localStorage.removeItem('access_token');
+                localStorage.removeItem('username');
+
                 window.location.href = 'login.html';
-            
-            } else {
-            
-                console.log("Acesso ao Dashboard permitido.");
-            
             }
+
         }).catch(error => {
+
             console.error('Erro ao validar o token:', error);
+
         });
     }
 });
@@ -32,7 +33,7 @@ document.addEventListener("DOMContentLoaded", function() {
 async function validateToken(token) {
     try {
         
-        let response = await fetch('http://localhost:8000/api/users/dashboard', {
+        let response = await fetch(`http://localhost:8000/api/users/dashboard/${token}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -54,23 +55,29 @@ async function validateToken(token) {
 
 document.getElementById("logoutForm").addEventListener('submit', async function(event){
     event.preventDefault();
+
     let token = localStorage.getItem('access_token');
     
-    await fetch('http://localhost:8000/api/users/logout', {
+    console.log(token);
+    
+    let response = await fetch(`http://localhost:8000/api/users/logout/${token}`, {
         method: 'POST',
+        
         headers: {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${token}`
         }
+    })
 
-    }).then(response => {
-        if(response) {
+    console.log(response)
+
+    if (response.ok){
+
+        console.log(response);
+        localStorage.removeItem('access_token');
+        localStorage.removeItem('username');
+
             // Redireciona para a página de login após o logout bem-sucedido
-            window.location.href = 'login.html';
-        } else {
-            console.error('Falha ao realizar logout');
-        }
-    }).catch(error => {
-        console.error('Erro na request de logout:', error);
-    });
+            // window.location.href = 'login.html';
+    }
 });

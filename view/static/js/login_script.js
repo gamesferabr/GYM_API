@@ -7,7 +7,9 @@ document.getElementById('loginForm').addEventListener('submit', async function(e
 
     if(ok){
         // Armazenar o first_name e tokens no localStorage
+        // localStorage.setItem('access_token', data.access); // Certifique-se de que esta é a chave correta
         localStorage.setItem('username', data.username); // Armazenando o first_name como 'username'
+        localStorage.setItem('access_token', data.data.access);
         window.location.href = 'dashboard.html';
     }
     else {

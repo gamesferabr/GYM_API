@@ -28,13 +28,14 @@ body, html {
 }
 
 .btn-custom {
-    background-color: #86bb71; /* Green color that matches the theme */
-    border-color: #86bb71;
+    background-color: green; /* Green color that matches the theme */
+    border-color: green;
     color: white;
     margin: 10px;
 }
 
 .btn-custom:hover {
-    background-color: #729c5f;
-    border-color: #729c5f;
+    background-color: darkgreen;
+    border-color: darkgreen;
+    color: white;
 }

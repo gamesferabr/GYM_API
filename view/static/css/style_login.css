@@ -4,7 +4,6 @@ body, html {
 }
 
 .bg {
-    /* Use the uploaded background image */
     background-image: url('images/image.webp');
     height: 100%;
     background-position: center;
@@ -29,12 +28,13 @@ body, html {
 }
 
 .btn-custom {
-    background-color: #86bb71; /* Similar green color as before */
-    border-color: #86bb71;
+    background-color: green; /* Similar green color as before */
+    border-color: green;
     color: white;
 }
 
 .btn-custom:hover {
-    background-color: #729c5f;
-    border-color: #729c5f;
+    background-color: darkgreen;
+    border-color: darkgreen;
+    color: white;
 }
