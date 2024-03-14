@@ -187,7 +187,7 @@ $(document).ready(function() {
                 const fdcId = $(this).data('fdcid');
                                 
                 const quantityInputId = `quantity-${$(this).attr('id').split('-')[1]}-${fdcId}`;
-                const quantity = $(`#${quantityInputId}`).val();
+                const quantity = parseInt($(`#${quantityInputId}`).val()) || 0;
                 
                 // Mostrar a comida, quantidade, carboidratos, proteínas, gorduras e calorias
                 // Substitua o bloco abaixo pela chamada AJAX real para obter informações nutricionais
@@ -210,18 +210,20 @@ $(document).ready(function() {
 
                         console.log(mealType);
 
-                        const result2 = result.labelNutrients;
+                       // Assegura que result2 não seja undefined antes de tentar acessar suas propriedades
+                        const result2 = result.labelNutrients || {};
 
                         const nome = result.description;
-                        const calorias = result2.calories.value;
-                        const proteinas = result2.protein.value;
-                        const gorduras = result2.fat.value;
-                        const carboidratos = result2.carbohydrates.value;
-                        const fibra = result2.fiber.value;
-                        const acucar = result2.sugars.value;
-                        const sodio = result2.sodium.value;
-                        const colesterol = result2.cholesterol.value;
-                        const gordura_saturada = result2.saturatedFat.value;
+                        // Agora aplica o operador de encadeamento opcional `?.` e `||` de forma segura
+                        const calorias = result2.calories?.value || 0;
+                        const proteinas = result2.protein?.value || 0;
+                        const gorduras = result2.fat?.value || 0;
+                        const carboidratos = result2.carbohydrates?.value || 0;
+                        const fibra = result2.fiber?.value || 0;
+                        const acucar = result2.sugars?.value || 0;
+                        const sodio = result2.sodium?.value || 0;
+                        const colesterol = result2.cholesterol?.value || 0;
+                        const gordura_saturada = result2.saturatedFat?.value || 0;
                         
                         // Montar um html do tipo lista, para mostrar os alimentos selecionados e enviar esse html para o backend para retornar para o usuário
                         const html = `
@@ -279,7 +281,7 @@ $(document).ready(function() {
     $('#btn-reset-view').click(async function() {
         await checkAndRefreshToken();
 
-        const container = $(this).closest('.meal-container');
+        const container = $('.carousel-item.active').find('.meal-container');
 
         const selectfood = $('.addSelectedFoods');
 

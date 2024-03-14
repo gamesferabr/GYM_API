@@ -61,7 +61,7 @@ document.addEventListener("DOMContentLoaded", async function () {
 
     let accessToken = localStorage.getItem('access_token');
 
-    let currentmeal = "breakfast";
+    let currentmeal = "dinner";
     
     let response = await fetch(`http://localhost:8000/api/diets/${data}/${currentmeal}/${accessToken}`, {
         method: 'GET',
@@ -184,7 +184,7 @@ document.getElementById("btn-date").addEventListener('click', async function(eve
     if (date !== new Date().toISOString().slice(0, 10)) {
         // Busca as informações da dieta para a data atual
         let accessToken = localStorage.getItem('access_token');
-        let currentmeal = "breakfast";
+        let currentmeal = "dinner";
         let response = await fetch(`http://localhost:8000/api/diets/${date}/${currentmeal}/${accessToken}`, {
             method: 'GET',
             headers: {

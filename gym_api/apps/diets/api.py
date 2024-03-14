@@ -1,4 +1,4 @@
-from django.http import Http404,HttpRequest
+from django.http import Http404,HttpRequest, HttpResponseBadRequest
 from ninja import Router,Path
 from .models import Diet
 from .schemas import DietIn, DietOut
@@ -6,6 +6,7 @@ from typing import List
 from apps.auth.auth import is_auth_ninja
 from apps.users.tokens import get_user_for_tokens
 from django.utils import timezone
+from datetime import datetime
 
 router = Router()
 
@@ -70,16 +71,24 @@ def get_today_diets_by_meal_type(request: HttpRequest, meal_type: str, token: st
 
 
 @router.get("/{date}/{meal_type}/{token}", response=List[DietOut], auth=is_auth_ninja)
-def get_today_diets_by_meal_type(request: HttpRequest, meal_type: str, token: str, date: str):
+def get_data_diets_by_meal_type(request: HttpRequest, date: str, meal_type: str, token: str):
     
     # Obter o usuário autenticado
     user = get_user_for_tokens(token)
         
-    # Obter a data que o usuário deseja
-    today = date
+    # Converter a string de data para um objeto date
+    try:
+        # Assumindo que a data esteja no formato "YYYY-MM-DD"
+        desired_date = datetime.strptime(date, "%Y-%m-%d").date()
+        
+        print(desired_date)
+    except ValueError:
+        # Retornar uma resposta de erro se a data não estiver no formato esperado
+        return HttpResponseBadRequest("Invalid date format. Use YYYY-MM-DD.")
     
-    # Filtrar dietas do usuário baseadas no tipo de refeição e na data atual
-    diets = Diet.objects.filter(user=user, mealtype=meal_type, date=today)
+    # Filtrar dietas do usuário baseadas no tipo de refeição e na data desejada
+    diets = Diet.objects.filter(user=user, mealtype=meal_type, date=desired_date)
     
     return diets
+
 

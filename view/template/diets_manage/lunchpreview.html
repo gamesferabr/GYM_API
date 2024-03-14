@@ -17,7 +17,10 @@
                     <!-- Isso vai para o backend depois -->
                     <div class="user-food-profile">
                         <h4>Lunch Preview</h4>
-                        <ul class="food-list"></ul>
+                        <input type="date" id="date-selector" class="date-selector" value="">
+                        <button class="button-style" id="btn-date">Search</button>
+                        <ul class="food-list" id="foodlist"></ul>
+                        <a class="button-style" href="diets.html" role="button" id="back">Back</a>
                     </div>
                 </div>
             </div>
@@ -29,5 +32,7 @@
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <script src="../../static/js/diets_script.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jwt-decode/build/jwt-decode.min.js"></script>
+<script src="../../static/js/lunch.js"></script>
 </body>
 </html>
