@@ -1,34 +1,40 @@
 async function refreshToken() {
     let refreshToken = localStorage.getItem('refresh_token');
-    
-    let response = await fetch(`http://localhost:8000/api/auth/token/refresh`, {
+    try{
+        let response = await fetch(`http://localhost:8000/api/auth/token/refresh`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
         body: JSON.stringify({ refresh: refreshToken }),
-    });
+        });
 
-    if (response.ok) {
-        let data = await response.json();
-        localStorage.setItem('access_token', data.access);
-        console.log('Token refreshed successfully.');
-
-    } else {
-        console.error('Erro ao atualizar o token.');
-
-        localStorage.removeItem('access_token');
-        localStorage.removeItem('refresh_token');
-
-        // window.location.href = 'login.html';
-        return false; // Falha na atualização do token
+        if (response.ok) {
+            let data = await response.json();
+            localStorage.setItem('access_token', data.access);
+            console.log('Token refreshed successfully.');} 
+            
+            else {
+                console.error('Erro ao atualizar o token.');
+                localStorage.removeItem('access_token');
+                localStorage.removeItem('refresh_token');
+        
+                window.location.href = '../login.html';
+                return false; // Falha na atualização do token
+            }
     }
+
+    catch (error) {
+        console.error('Erro ao atualizar o token:', error);
+        window.location.href = '../login.html';
+    }
+
 }
 
 async function checkAndRefreshToken() {
     let accessToken = localStorage.getItem('access_token');
     if (!accessToken) {
-        // window.location.href = 'login.html';
+        window.location.href = '../login.html';
         return;
     }
 
@@ -56,7 +62,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     document.getElementById('date-selector').addEventListener('change', fetchDietData);
 
     document.getElementById('back').addEventListener('click', function () {
-        window.location.href = 'diet.html#breakfastcontainer';
+        window.location.href = 'diet.html#dinnercontainer';
     });
 
     let accessToken = localStorage.getItem('access_token');
@@ -70,18 +76,14 @@ document.addEventListener("DOMContentLoaded", async function () {
         }
     });
 
-    console.log(response);
-
     if (response.status === 200) {
 
         let data = await response.json();
         
-        console.log(data);
-
         updateFoodList(data);
 
     } else {
-        console.error('Erro ao buscar o café da manhã:', response.status);
+        console.error('Error:', response.status);
     }
 });
 
@@ -92,7 +94,7 @@ document.addEventListener("DOMContentLoaded", async function () {
     let accessToken = localStorage.getItem('access_token');
     
     if (!accessToken) {
-        window.location.href = 'login.html';
+        window.location.href = '../login.html';
 
     } else {
         // Opcional: Valida o token com o servidor
@@ -101,7 +103,7 @@ document.addEventListener("DOMContentLoaded", async function () {
                 
                 localStorage.removeItem('access_token');
                 
-                window.location.href = 'login.html';
+                window.location.href = '../login.html';
             }
 
         }).catch(error => {
@@ -142,38 +144,65 @@ async function fetchDietData() {
     return date;
 }
 
-function updateFoodList(data) {    
-    
+async function updateFoodList(data) {    
+    await checkAndRefreshToken();
+    let foodListElement = document.getElementById('foodlist');
+    foodListElement.innerHTML = ''; // Limpa a lista antes de adicionar novos itens
+
     if (data && data.length > 0) {
-        for (let i = 0; i < data.length; i++) {
-            let food = data[i];
+        data.forEach(food => {
             let foodElement = document.createElement('li');
-            foodElement.textContent = food.name;
-            foodElement.innerHTML = food.description;
+            foodElement.className = `list-group-item-${food.id}`;
+            foodElement.innerHTML = `
+                ${food.description}
+                <button class="btn btn-danger delete-food-btn" data-food-id="${food.id}">Delete</button>
+            `;
 
-            foodElement.className = 'list-group-item';
-            
-            foodElement.style = 'background-color: #f8f9fa';
-            foodElement.style = 'border: 1px solid #dee2e6';
-            foodElement.style = 'border-radius: 0.25rem';
-            foodElement.style = 'margin-top: 5px';
-            foodElement.style = 'margin-bottom: 5px';
-            foodElement.style = 'padding: 10px';
-            foodElement.style = 'text-align: left';
-            foodElement.style = 'font-size: 20px';
-            foodElement.style = 'color: #6c757d';
-            foodElement.style = 'justify-content: space-between';
-
-            // Arrumar o height para uma altura fixa menor
-            foodElement.style = 'height: 100px';
-
-            // Arrumar o width para uma largura fixa maior
-            foodElement.style = 'width: 100%';
             document.getElementById('foodlist').appendChild(foodElement);
+
+            foodElement.querySelector('.delete-food-btn').addEventListener('click', function() {
+                deleteFood(this.getAttribute('data-food-id'));
+            });
+        });
+    } else {
+        // Mostra uma mensagem e opções quando não houver dados
+        foodListElement.innerHTML = `
+            <li class="list-group-item list-group-item-warning">No diet found for this date. You can 
+                <a href="diets.html">add a new diet</a> or 
+                select another date.</li>
+        `;
+    }
+}
+
+
+// Função para deletar o alimento
+async function deleteFood(foodId) {
+
+    // Implemente a lógica para deletar o alimento aqui
+    // Isso pode envolver enviar uma requisição DELETE para o seu backend
+    console.log(`Deleting food with ID: ${foodId}`);
+    let accessToken = localStorage.getItem('access_token');
+    
+    let response = await fetch(`http://localhost:8000/api/diets/delete/${foodId}/${accessToken}`, {
+        method: 'DELETE',
+        headers: {
+            'Authorization': 'Bearer ' + accessToken
+        }
+    });
+
+    if (response.ok) {
+        // Remove o item da lista na interface do usuário
+        document.querySelector(`.list-group-item-${foodId}`).remove();
+        console.log('Food deleted successfully.');
+
+        // Se a list-group-item estiver vazia, faz o update da lista
+        if (document.getElementById('foodlist').innerHTML === '') {
+            updateFoodList();
         }
     } else {
-        alert('No data found for this date. Please select another date.');
+        console.error('Erro ao deletar o alimento:', response.status);
     }
+    // Aqui, você pode atualizar a interface do usuário ou recarregar os itens após a exclusão
 }
 
 document.getElementById("btn-date").addEventListener('click', async function(event){
@@ -184,7 +213,9 @@ document.getElementById("btn-date").addEventListener('click', async function(eve
     if (date !== new Date().toISOString().slice(0, 10)) {
         // Busca as informações da dieta para a data atual
         let accessToken = localStorage.getItem('access_token');
+
         let currentmeal = "dinner";
+        
         let response = await fetch(`http://localhost:8000/api/diets/${date}/${currentmeal}/${accessToken}`, {
             method: 'GET',
             headers: {
@@ -199,7 +230,6 @@ document.getElementById("btn-date").addEventListener('click', async function(eve
             let data = await response.json();
 
             updateFoodList(data);
-    
         }
         else {
             alert('No data found for this date. Please select another date.');

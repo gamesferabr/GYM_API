@@ -31,13 +31,13 @@ def list_diets(request:HttpRequest):
     return diets
 
 
-@router.delete("/{diet_id}",auth=is_auth_ninja)
-def delete_diet(request:HttpRequest, diet_id: int):
-    token = request.COOKIES.get("access_token")
+@router.delete("delete/{diet_id}/{token}",auth=is_auth_ninja)
+def delete_diet(request:HttpRequest, diet_id: str, token:str):
     user = get_user_for_tokens(token)
     
     diet = Diet.objects.filter(id=diet_id, user=user)
     diet.delete()
+    
     return {"success": True}
 
 
@@ -81,7 +81,6 @@ def get_data_diets_by_meal_type(request: HttpRequest, date: str, meal_type: str,
         # Assumindo que a data esteja no formato "YYYY-MM-DD"
         desired_date = datetime.strptime(date, "%Y-%m-%d").date()
         
-        print(desired_date)
     except ValueError:
         # Retornar uma resposta de erro se a data não estiver no formato esperado
         return HttpResponseBadRequest("Invalid date format. Use YYYY-MM-DD.")

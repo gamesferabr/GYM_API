@@ -11,33 +11,41 @@ document.querySelectorAll('.inputsearch').forEach(input => {
 
 async function refreshToken() {
     let refreshToken = localStorage.getItem('refresh_token');
-    let response = await fetch(`http://localhost:8000/api/auth/token/refresh`, {
+    try{
+        let response = await fetch(`http://localhost:8000/api/auth/token/refresh`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
         body: JSON.stringify({ refresh: refreshToken }),
-    });
+        });
 
-    if (response.ok) {
-        let data = await response.json();
-        localStorage.setItem('access_token', data.access);
-        console.log('Token refreshed successfully.');
-
-    } else {
-        console.error('Erro ao atualizar o token.');
-        localStorage.removeItem('access_token');
-        localStorage.removeItem('refresh_token');
-
-        // window.location.href = 'login.html';
-        return false; // Falha na atualização do token
+        if (response.ok) {
+            let data = await response.json();
+            localStorage.setItem('access_token', data.access);
+            console.log('Token refreshed successfully.');} 
+            
+            else {
+                console.error('Erro ao atualizar o token.');
+                localStorage.removeItem('access_token');
+                localStorage.removeItem('refresh_token');
+        
+                window.location.href = '../login.html';
+                return false; // Falha na atualização do token
+            }
     }
+
+    catch (error) {
+        console.error('Erro ao atualizar o token:', error);
+        window.location.href = '../login.html';
+    }
+
 }
 
 async function checkAndRefreshToken() {
     let accessToken = localStorage.getItem('access_token');
     if (!accessToken) {
-        // window.location.href = 'login.html';
+        window.location.href = '../login.html';
         return;
     }
 

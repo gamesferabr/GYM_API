@@ -62,12 +62,12 @@ document.addEventListener("DOMContentLoaded", async function () {
     document.getElementById('date-selector').addEventListener('change', fetchDietData);
 
     document.getElementById('back').addEventListener('click', function () {
-        window.location.href = 'diet.html#lunchcontainer';
+        window.location.href = 'diet.html#snackscontainer';
     });
 
     let accessToken = localStorage.getItem('access_token');
 
-    let currentmeal = "lunch";
+    let currentmeal = "snacks";
     
     let response = await fetch(`http://localhost:8000/api/diets/${data}/${currentmeal}/${accessToken}`, {
         method: 'GET',
@@ -214,7 +214,7 @@ document.getElementById("btn-date").addEventListener('click', async function(eve
         // Busca as informações da dieta para a data atual
         let accessToken = localStorage.getItem('access_token');
 
-        let currentmeal = "lunch";
+        let currentmeal = "snacks";
         
         let response = await fetch(`http://localhost:8000/api/diets/${date}/${currentmeal}/${accessToken}`, {
             method: 'GET',

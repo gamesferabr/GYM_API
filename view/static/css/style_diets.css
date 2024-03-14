@@ -202,3 +202,33 @@ h1{
     margin-bottom: 10px;
 }
 
+.delete-food-btn {
+    display: inline-block; /* Permite o uso de margin e padding */
+    padding: 8px 15px; /* Ajuste conforme necessário para o tamanho */
+    font-size: 14px; /* Ajuste conforme necessário para o tamanho do texto */
+    color: white; /* Cor do texto */
+    background-color: red;
+    border: 1px solid red; /* Cor da borda */
+    border-radius: 0.25rem; /* Arredondamento da borda */
+    text-align: center; /* Alinhamento do texto */
+    text-decoration: none; /* Remove o sublinhado dos links */
+    cursor: pointer; /* Muda o cursor para indicar clicabilidade */
+    margin-bottom: 20px;
+    margin-left: 3px;
+}
+
+.delete-food-btn:hover {
+    background-color: darkred; /* Cor de fundo ao passar o mouse e focar */
+    border-color: darkred; /* Cor da borda ao passar o mouse e focar */
+    text-align: none;
+    text-decoration: none;
+    color: white;
+}
+
+.food-profile-breakfast, .food-profile-lunch, .food-profile-dinner, .food-profile-snacks{
+    border: 1px solid #ccc; /* Apenas para visualização, pode ser ajustado conforme o design */
+    margin-bottom: 10px; /* Espaço abaixo do contêiner para separá-lo dos elementos seguintes */
+    padding: 5px; /* Espaçamento interno para não colar o conteúdo nas bordas */
+    border-radius: 0.25rem; /* Arredondamento da borda */
+    background-color: #dadada; /* Cor de fundo clara para diferenciar as seções */
+}
