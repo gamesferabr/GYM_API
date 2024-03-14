@@ -48,34 +48,36 @@ def create_user(request: HttpRequest, payload: UserCreateSchema):
 @router.post('/login', response={200: None})
 def login(request: HttpRequest, auth: AuthSchema):
     try:
-        # Tenta autenticar o usuário com as credenciais fornecidas
         user = authenticate(request, email=auth.email, password=auth.password)
 
         if user is None:
-            # Se a autenticação falhar, retorna uma mensagem de erro genérica
-            # (Evitar especificar se o e-mail ou senha está incorreto por razões de segurança)
             return JsonResponse({"detail": "Invalid credentials."}, status=401)
 
-        # Se a autenticação for bem-sucedida, gera os tokens
         tokens = get_tokens_for_user(user)
 
-        # Pegar o first Name do usuário
-        first_name = CustomUser.objects.filter(
-            email=auth.email
-        ).values('first_name')
+        # Já que você autenticou o usuário, você pode usar diretamente os atributos do objeto `user`
+        first_name = user.first_name
+        last_name = user.last_name
+        email = user.email
+
+        # Preparar a resposta
+        response_data = {
+            "success": True, 
+            "message": "Login successful.", 
+            "data": tokens, 
+            "username": first_name, 
+            "lastname": last_name, 
+            "email": email
+        }
+
+        response = JsonResponse(response_data, status=200)
         
-        first_name = first_name[0]['first_name']
-                
-        response = JsonResponse({"success": True, "message": "Login successful.", "data": tokens, "username":first_name}, status=200)
-        
-        # Configura os cookies com os tokens
         response.set_cookie(key='access_token', value=tokens['access'], httponly=True, samesite='Lax')  
         response.set_cookie(key='refresh_token', value=tokens['refresh'], httponly=True, samesite='Lax')
         
         return response
 
     except ValidationError as e:
-        # Captura erros de validação e retorna uma mensagem apropriada
         return JsonResponse({"detail": e.messages}, status=400)
     
     
