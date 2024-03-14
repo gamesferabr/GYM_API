@@ -20,11 +20,6 @@ def add_diet(request:HttpRequest, diet_in: DietIn,token:str):
     except Exception as e:
             print(f"Error creating diet: {e}")
 
-@router.get("/search", response=List[DietOut], auth=is_auth_ninja)
-def search_diets(request:HttpRequest, query: str):
-    diets = Diet.objects.filter()
-    return diets
-
 
 @router.get("/", response=List[DietOut], auth=is_auth_ninja)
 def list_diets(request:HttpRequest):
@@ -33,18 +28,6 @@ def list_diets(request:HttpRequest):
     
     diets = Diet.objects.filter(user=user)
     return diets
-
-
-@router.put("/{diet_id}", response=DietOut,auth=is_auth_ninja)
-def update_diet(request:HttpRequest, diet_id: int, data: DietIn):
-    token = request.COOKIES.get("access_token")
-    user = get_user_for_tokens(token)
-    
-    diet = Diet.objects.filter(id=diet_id, user=user).first()
-    for attribute, value in data.dict().items():
-        setattr(diet, attribute, value)
-    diet.save()
-    return diet
 
 
 @router.delete("/{diet_id}",auth=is_auth_ninja)
@@ -70,13 +53,12 @@ def get_diet(request:HttpRequest, diet_id:int = Path(...)):
         raise Http404("Workout not found")
 
 
-@router.get("/today/{meal_type}", response=List[DietOut], auth=is_auth_ninja)
-def get_today_diets_by_meal_type(request: HttpRequest, meal_type: str):
+@router.get("/today/{meal_type}/{token}", response=List[DietOut], auth=is_auth_ninja)
+def get_today_diets_by_meal_type(request: HttpRequest, meal_type: str, token: str):
     
     # Obter o usuário autenticado
-    token = request.COOKIES.get("access_token")
     user = get_user_for_tokens(token)
-    
+        
     # Obter a data atual
     today = timezone.now().date()
     
@@ -84,3 +66,20 @@ def get_today_diets_by_meal_type(request: HttpRequest, meal_type: str):
     diets = Diet.objects.filter(user=user, mealtype=meal_type, date=today)
     
     return diets
+
+
+
+@router.get("/{date}/{meal_type}/{token}", response=List[DietOut], auth=is_auth_ninja)
+def get_today_diets_by_meal_type(request: HttpRequest, meal_type: str, token: str, date: str):
+    
+    # Obter o usuário autenticado
+    user = get_user_for_tokens(token)
+        
+    # Obter a data que o usuário deseja
+    today = date
+    
+    # Filtrar dietas do usuário baseadas no tipo de refeição e na data atual
+    diets = Diet.objects.filter(user=user, mealtype=meal_type, date=today)
+    
+    return diets
+

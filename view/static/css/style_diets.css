@@ -186,3 +186,23 @@ h1{
     background-color: darkgreen; /* Muda a cor ao passar o mouse */
     color: white;
 }
+
+.food-list{
+    max-height: 300px; /* Altura máxima antes de começar a rolar */
+    max-width: 600px;
+    overflow-y: auto; /* Permite rolagem vertical se o conteúdo exceder a altura máxima */
+    border: 1px solid #ccc; /* Apenas para visualização, pode ser ajustado conforme o design */
+    margin-bottom: 10px; /* Espaço abaixo do contêiner para separá-lo dos elementos seguintes */
+    padding: 5px; /* Espaçamento interno para não colar o conteúdo nas bordas */
+}
+
+.breakfastuser{
+    color: #333; /* Cor escura para o texto dos títulos */
+    margin-bottom: 10px;
+}
+
+.dataselector{
+    display: flex;
+    margin-bottom: 10px;
+    margin-left: 10px;
+}
