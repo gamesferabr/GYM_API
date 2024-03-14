@@ -101,11 +101,12 @@ async function validateToken(token) {
 
 document.getElementById("logoutForm").addEventListener('submit', async function(event){
     event.preventDefault();
+    
+    // Verifica e possivelmente atualiza o token antes de prosseguir
+    await checkAndRefreshToken();
 
     let token = localStorage.getItem('access_token');
-    
-    console.log(token);
-    
+        
     let response = await fetch(`http://localhost:8000/api/users/logout/${token}`, {
         method: 'POST',
         
@@ -114,8 +115,6 @@ document.getElementById("logoutForm").addEventListener('submit', async function(
             'Authorization': `Bearer ${token}`
         }
     })
-
-    console.log(response)
 
     if (response.ok){
 

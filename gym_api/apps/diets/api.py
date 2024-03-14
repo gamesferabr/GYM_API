@@ -5,6 +5,7 @@ from .schemas import DietIn, DietOut
 from typing import List
 from apps.auth.auth import is_auth_ninja
 from apps.users.tokens import get_user_for_tokens
+from django.utils import timezone
 
 router = Router()
 
@@ -18,7 +19,6 @@ def add_diet(request:HttpRequest, diet_in: DietIn,token:str):
             return diet
     except Exception as e:
             print(f"Error creating diet: {e}")
-            # Consider returning an error response here
 
 @router.get("/search", response=List[DietOut], auth=is_auth_ninja)
 def search_diets(request:HttpRequest, query: str):
@@ -68,3 +68,19 @@ def get_diet(request:HttpRequest, diet_id:int = Path(...)):
 
     except Diet.DoesNotExist:
         raise Http404("Workout not found")
+
+
+@router.get("/today/{meal_type}", response=List[DietOut], auth=is_auth_ninja)
+def get_today_diets_by_meal_type(request: HttpRequest, meal_type: str):
+    
+    # Obter o usuário autenticado
+    token = request.COOKIES.get("access_token")
+    user = get_user_for_tokens(token)
+    
+    # Obter a data atual
+    today = timezone.now().date()
+    
+    # Filtrar dietas do usuário baseadas no tipo de refeição e na data atual
+    diets = Diet.objects.filter(user=user, mealtype=meal_type, date=today)
+    
+    return diets

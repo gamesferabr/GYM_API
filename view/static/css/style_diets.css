@@ -173,3 +173,16 @@ h1{
     text-decoration: none;
     color: white;
 }
+
+.btn-back {
+    margin-bottom: 20px; /* Espaço abaixo do botão */
+    transition: background-color 0.3s ease; /* Suaviza a mudança de cor ao passar o mouse */
+    color: white;
+    background-color: green;
+    border: none;
+}
+
+.btn-back:hover {
+    background-color: darkgreen; /* Muda a cor ao passar o mouse */
+    color: white;
+}

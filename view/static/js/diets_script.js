@@ -1,3 +1,14 @@
+document.querySelectorAll('.inputsearch').forEach(input => {
+    input.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            // Previne a ação padrão do enter
+            e.preventDefault();
+            // Simula um clique no botão de adição (+) relacionado ao input
+            input.nextElementSibling.click();
+        }
+    });
+});
+
 async function refreshToken() {
     let refreshToken = localStorage.getItem('refresh_token');
     let response = await fetch(`http://localhost:8000/api/auth/token/refresh`, {
@@ -100,7 +111,9 @@ async function validateToken(token) {
 
 // Lógica de procurar a dieta ao usuário
 $(document).ready(function() {
+
     $('.add-food-btn').click(async function() {
+
         await checkAndRefreshToken();
 
         const mealType = $(this).data('meal');
@@ -110,16 +123,18 @@ $(document).ready(function() {
         
         if (query) {
             $.ajax({
+
                 url: 'https://api.nal.usda.gov/fdc/v1/foods/search',
                 type: 'GET',
                 dataType: 'json',
                 data: {
 
-                    api_key: 'HDg87qCY7kJPk3ozteKzgRarv7qGnpCAcDPLj8GZ', // Substitua YOUR_API_KEY pela sua chave de API real
+                    api_key: 'HDg87qCY7kJPk3ozteKzgRarv7qGnpCAcDPLj8GZ', // Substitua YOUR_API_KEY pela sua
                     query: query,
                 },
 
                 success: function(result) {
+
                     if (result.foods && result.foods.length > 0) {
                         const selectfood = $('.addSelectedFoods');
 
@@ -140,6 +155,7 @@ $(document).ready(function() {
                             `;
                             resultsContainer.append(checkBoxHtml);
                         });
+
                         // Mostra o contêiner de resultados quando houver resultados
                         resultsContainer.css('display', 'block');
                     
@@ -152,6 +168,7 @@ $(document).ready(function() {
                         container.css('display', 'none');
                     }
                 },
+
                 error: function(error) {
                     alert('Error: ' + error.message);
                 }
@@ -162,10 +179,9 @@ $(document).ready(function() {
 
     //Lógica para adicionar a dieta ao banco de dados
     $(document).ready(async function() {
-        await checkAndRefreshToken();
-
         // Quando um botão é clicado para adicionar a dieta
-        $('.addSelectedFoods').on('click', function() {
+        $('.addSelectedFoods').on('click', async function() {
+            await checkAndRefreshToken();
 
             $('.food-checkbox:checked').each(function() {
                 const fdcId = $(this).data('fdcid');
@@ -173,13 +189,12 @@ $(document).ready(function() {
                 const quantityInputId = `quantity-${$(this).attr('id').split('-')[1]}-${fdcId}`;
                 const quantity = $(`#${quantityInputId}`).val();
                 
-                console.log(`FDC ID: ${fdcId}, Quantity: ${quantity}g`);
-
                 // Mostrar a comida, quantidade, carboidratos, proteínas, gorduras e calorias
                 // Substitua o bloco abaixo pela chamada AJAX real para obter informações nutricionais
                 // Certifique-se de enviar o token de acesso no cabeçalho da solicitação
                 // e tratar a resposta e os erros adequadamente
                 $.ajax({
+                    //Pegar na quantidade de alimentos selecionados e enviar para o backend
                     url: `https://api.nal.usda.gov/fdc/v1/food/${fdcId}`,
                     type: 'GET',
                     dataType: 'json',
@@ -188,7 +203,13 @@ $(document).ready(function() {
                     },
 
                     success: async function(result) {
-                        console.log('Informações nutricionais:', result);
+                        
+                        // Pegar o valor do tipo de refeição no h3 apenas em que o carousel item está ativo
+                        const container = $('.carousel-item.active').find('.meal-container');
+                        const mealType = container.find('h3').text().toLowerCase();
+
+                        console.log(mealType);
+
                         const result2 = result.labelNutrients;
 
                         const nome = result.description;
@@ -201,37 +222,31 @@ $(document).ready(function() {
                         const sodio = result2.sodium.value;
                         const colesterol = result2.cholesterol.value;
                         const gordura_saturada = result2.saturatedFat.value;
-
-                        const dietData = {
-                            nome,
-                            quantity,
-                            calorias,
-                            proteinas,
-                            gorduras,
-                            carboidratos,
-                            fibra,
-                            acucar,
-                            sodio,
-                            colesterol,
-                            gordura_saturada,
-                        };
-
-                        console.log(dietData);
                         
+                        // Montar um html do tipo lista, para mostrar os alimentos selecionados e enviar esse html para o backend para retornar para o usuário
+                        const html = `
+                            <div class="food-profile-${mealType}">
+                                <h3>${nome}</h3>
+                                <p>Quantity: ${quantity}g</p>
+                                <p>Calories: ${calorias}g</p>
+                                <p>Protein: ${proteinas}g</p>
+                                <p>Fat: ${gorduras}g</p>
+                                <p>Carb: ${carboidratos}g</p>
+                                <p>Fiber: ${fibra}g</p>
+                                <p>Sugars: ${acucar}g</p>
+                                <p>Sodium: ${sodio}g</p>
+                                <p>Cholesterol: ${colesterol}g</p>
+                                <p>Saturated Fat: ${gordura_saturada}g</p>
+                            </div>
+                        `;
+
                         let dietDataSend = {
                              name: nome,
-                             description: `"Calorias: ${calorias}g, 
-                                Proteínas: ${proteinas}g, 
-                                Gorduras: ${gorduras}g, 
-                                Carboidratos: ${carboidratos}g, 
-                                Fibra: ${fibra}g, 
-                                Açúcar: ${acucar}g, 
-                                Sódio: ${sodio}g, 
-                                Colesterol: ${colesterol}g, 
-                                Gordura Saturada: ${gordura_saturada}g"`,
-                                
-                                //Lógica para pegar o dia atual
-                                date: new Date().toISOString().slice(0, 10),       
+                             description: html,
+
+                             //Lógica para pegar o dia atual
+                             date: new Date().toISOString().slice(0, 10),  
+                             mealtype: mealType,     
                         };
                         
                         let accessToken = localStorage.getItem('access_token');
@@ -247,7 +262,11 @@ $(document).ready(function() {
                             body: JSON.stringify(dietDataSend),
                         });
                         
-                        console.log(response);
+                        if (response.ok) {
+                            // reseta a view
+                            $('#btn-reset-view').click();
+                            alert('Food added successfully!');
+                        }
                     }
                 });
             });
@@ -257,7 +276,9 @@ $(document).ready(function() {
 
 
 $(document).ready(function() {
-    $('#btn-reset-view').click(function() {
+    $('#btn-reset-view').click(async function() {
+        await checkAndRefreshToken();
+
         const container = $(this).closest('.meal-container');
 
         const selectfood = $('.addSelectedFoods');
