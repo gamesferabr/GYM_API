@@ -33,7 +33,6 @@ ALLOWED_HOSTS = os.getenv('DJANGO_ALLOWED_HOSTS', 'localhost').split(',')
 SECURE_SSL_REDIRECT = True
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
-SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 SWAGGER_SETTINGS = {
     'SECURITY_DEFINITIONS': {
@@ -113,11 +112,11 @@ WSGI_APPLICATION = 'gym_api.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': '',
-        'USER': '',
-        'PASSWORD': '',
-        'HOST': '',
-        'PORT': '',
+        'NAME': 'postgres_new',
+        'USER': 'postgres_new',
+        'PASSWORD': 'PKp7nYu#_%~}1K2I',
+        'HOST': '127.0.0.1',
+        'PORT': '5432',
     }
 }
 
