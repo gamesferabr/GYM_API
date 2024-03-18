@@ -78,7 +78,7 @@ MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware',
 ]
 
-ROOT_URLCONF = 'gym_api.urls'
+ROOT_URLCONF = 'gym_api.gym_api.urls'
 
 TEMPLATES = [
     {
@@ -96,7 +96,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'gym_api.wsgi.application'
+WSGI_APPLICATION = 'gym_api.gym_api.wsgi.application'
 
 
 # Database
@@ -120,7 +120,7 @@ DATABASES = {
     }
 }
 
-AUTH_USER_MODEL = 'users.CustomUser'
+AUTH_USER_MODEL = 'gym_api.users.CustomUser'
 
 
 # Password validation
