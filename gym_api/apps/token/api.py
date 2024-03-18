@@ -2,8 +2,8 @@ from django.http import HttpRequest
 from ninja import Router
 import jwt
 from django.conf import settings
-from apps.users.models import CustomUser
-from apps.users.tokens import get_tokens_for_user
+from gym_api.apps.users.models import CustomUser
+from gym_api.apps.users.tokens import get_tokens_for_user
 from .schemas import TokenRefreshSchema, TokenResponseSchema
 
 router = Router()

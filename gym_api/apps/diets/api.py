@@ -3,8 +3,8 @@ from ninja import Router,Path
 from .models import Diet
 from .schemas import DietIn, DietOut
 from typing import List
-from apps.auth.auth import is_auth_ninja
-from apps.users.tokens import get_user_for_tokens
+from gym_api.apps.auth.auth import is_auth_ninja
+from gym_api.apps.users.tokens import get_user_for_tokens
 from django.utils import timezone
 from datetime import datetime
 
