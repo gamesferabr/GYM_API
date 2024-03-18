@@ -24,10 +24,16 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-cypkvo++so(u@x09w$&b*6f81+9-z6a&2)$7v5#v_gnzt%ey7)'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = ['*']
+import os
 
+ALLOWED_HOSTS = os.getenv('DJANGO_ALLOWED_HOSTS', 'localhost').split(',')
+
+SECURE_SSL_REDIRECT = True
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 SWAGGER_SETTINGS = {
     'SECURITY_DEFINITIONS': {
@@ -57,6 +63,8 @@ INSTALLED_APPS = [
     'apps.workout',
     'apps.diets',
     'corsheaders',
+    'sslserver',
+
 ]
 
 MIDDLEWARE = [
@@ -172,12 +180,12 @@ REST_FRAMEWORK = {
     ),
 }
 
-CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOW_ALL_ORIGINS = False
 
-# CORS_ALLOWED_ORIGINS = [
-#     "http://127.0.0.1:5500",
-#     # Adicione outros domínios conforme necessário
-# ]
+CORS_ALLOWED_ORIGINS = [
+    'https://frontendgymapi.vercel.app',
+    
+]
 
 CORS_ALLOW_HEADERS = [
     'content-type',
