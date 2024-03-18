@@ -1,5 +1,6 @@
 from ninja import Schema
 from datetime import date
+import uuid
 
 class WorkoutIn(Schema):
     name: str
@@ -7,7 +8,7 @@ class WorkoutIn(Schema):
     date: date
 
 class WorkoutOut(Schema):
-    id: int
+    id: uuid.UUID 
     name: str
     description: str
     date: date

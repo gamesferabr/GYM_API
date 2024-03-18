@@ -95,10 +95,21 @@ WSGI_APPLICATION = 'gym_api.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'postgres_new',
+        'USER': 'postgres_new',
+        'PASSWORD': 'PKp7nYu#_%~}1K2I',
+        'HOST': '127.0.0.1',
+        'PORT': '5432',
     }
 }
 

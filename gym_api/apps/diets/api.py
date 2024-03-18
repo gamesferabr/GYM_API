@@ -41,19 +41,6 @@ def delete_diet(request:HttpRequest, diet_id: str, token:str):
     return {"success": True}
 
 
-@router.get("/{diet_id}",response=DietOut, auth=is_auth_ninja)
-def get_diet(request:HttpRequest, diet_id:int = Path(...)):
-    try:    
-        token = request.COOKIES.get("access_token")
-        user = get_user_for_tokens(token)
-    
-        diet = Diet.objects.get(id= diet_id, user = user)
-        return diet
-
-    except Diet.DoesNotExist:
-        raise Http404("Workout not found")
-
-
 @router.get("/today/{meal_type}/{token}", response=List[DietOut], auth=is_auth_ninja)
 def get_today_diets_by_meal_type(request: HttpRequest, meal_type: str, token: str):
     
@@ -67,7 +54,6 @@ def get_today_diets_by_meal_type(request: HttpRequest, meal_type: str, token: st
     diets = Diet.objects.filter(user=user, mealtype=meal_type, date=today)
     
     return diets
-
 
 
 @router.get("/{date}/{meal_type}/{token}", response=List[DietOut], auth=is_auth_ninja)
@@ -89,5 +75,3 @@ def get_data_diets_by_meal_type(request: HttpRequest, date: str, meal_type: str,
     diets = Diet.objects.filter(user=user, mealtype=meal_type, date=desired_date)
     
     return diets
-
-

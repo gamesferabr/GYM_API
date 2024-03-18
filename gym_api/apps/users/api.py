@@ -17,10 +17,8 @@ router = Router()
 @router.post("/users", response={201: None})
 def create_user(request: HttpRequest, payload: UserCreateSchema):
     try:
-        # Primeiro, valida a senha antes de criar o usuário
         validate_password(payload.password)
 
-        # Agora, cria o usuário sem definir a senha ainda
         with transaction.atomic():
             
             user = CustomUser(
@@ -41,7 +39,6 @@ def create_user(request: HttpRequest, payload: UserCreateSchema):
         return JsonResponse({"detail": "This email is already in use."}, status=400)
         
     except Exception as e:
-        # Captura outros tipos de erro não especificados anteriormente
         return JsonResponse({"detail": f"An unexpected error occurred: {str(e)}"}, status=500)
 
 
@@ -55,7 +52,6 @@ def login(request: HttpRequest, auth: AuthSchema):
 
         tokens = get_tokens_for_user(user)
 
-        # Já que você autenticou o usuário, você pode usar diretamente os atributos do objeto `user`
         first_name = user.first_name
         last_name = user.last_name
         email = user.email
