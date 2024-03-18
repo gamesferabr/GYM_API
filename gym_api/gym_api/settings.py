@@ -120,7 +120,7 @@ DATABASES = {
     }
 }
 
-AUTH_USER_MODEL = 'gym_api.users.CustomUser'
+AUTH_USER_MODEL = 'users.CustomUser'
 
 
 # Password validation
