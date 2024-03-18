@@ -59,8 +59,8 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
     'rest_framework_simplejwt.token_blacklist',
     'drf_yasg',
-    'apps.workout',
-    'apps.diets',
+    'gym_api.apps.workout',
+    'gym_api.apps.diets',
     'corsheaders',
     'sslserver',
 
