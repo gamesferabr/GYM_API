@@ -53,7 +53,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'apps.users',
+    'gym_api.apps.users',
     'ninja',
     'rest_framework',
     'rest_framework_simplejwt',
