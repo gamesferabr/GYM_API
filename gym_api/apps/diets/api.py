@@ -1,10 +1,10 @@
 from django.http import Http404,HttpRequest, HttpResponseBadRequest
 from ninja import Router,Path
-from apps.diets.models import Diet
-from apps.diets.schemas import DietIn, DietOut
+from gym_api.apps.diets.models import Diet
+from gym_api.apps.diets.schemas import DietIn, DietOut
 from typing import List
-from apps.auth.auth import is_auth_ninja
-from apps.users.tokens import get_user_for_tokens
+from gym_api.apps.auth.auth import is_auth_ninja
+from gym_api.apps.users.tokens import get_user_for_tokens
 from django.utils import timezone
 from datetime import datetime
 

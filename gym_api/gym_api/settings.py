@@ -56,14 +56,14 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-    'apps.users',
+    'gym_api.apps.users',
     'ninja',
     'rest_framework',
     'rest_framework_simplejwt',
     'rest_framework_simplejwt.token_blacklist',
     'drf_yasg',
-    'apps.workout',
-    'apps.diets',
+    'gym_api.apps.workout',
+    'gym_api.apps.diets',
     'corsheaders',
     'sslserver',
 ]
@@ -80,7 +80,7 @@ MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware',
 ]
 
-ROOT_URLCONF = 'gymapi.urls'
+ROOT_URLCONF = 'gym_api.gym_api.urls'
 
 TEMPLATES = [
     {
@@ -98,7 +98,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'gymapi.wsgi.application'
+WSGI_APPLICATION = 'gym_api.gym_api.wsgi.application'
 
 
 # Database
@@ -126,7 +126,7 @@ else:
         }
     }
 
-AUTH_USER_MODEL = 'users.CustomUser'
+AUTH_USER_MODEL = 'gym_api.users.CustomUser'
 
 
 # Password validation
