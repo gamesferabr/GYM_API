@@ -1,10 +1,10 @@
 from django.contrib import admin
 from django.urls import path, include
 from ninja import NinjaAPI
-from gym_api.apps.users.api import router as users_router
-from gym_api.apps.workout.api import router as workouts_router
-from gym_api.apps.diets.api import router as diets_router
-from gym_api.apps.token.api import router as auth_router
+from apps.users.api import router as users_router
+# from apps.workout.api import router as workouts_router
+from apps.diets.api import router as diets_router
+from apps.token.api import router as auth_router
 
 # Cria uma instância do NinjaAPI e adiciona os routers
 api = NinjaAPI()
