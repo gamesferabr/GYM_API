@@ -25,6 +25,3 @@ source ./venv/Scripts/activate
 
 # Instala dependências
 pip install -r requirements.txt
-
-# Para encerrar o Cloud SQL Proxy quando o script terminar
-trap "kill $!" EXIT
