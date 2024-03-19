@@ -25,7 +25,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-cypkvo++so(u@x09w$&b*6f81+9-z6a&2)$7v5#v_gnzt%ey7)'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = [
     'localhost',
@@ -81,7 +81,7 @@ MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware',
 ]
 
-ROOT_URLCONF = 'gym_api.gym_api.urls'
+ROOT_URLCONF = 'gym_api.urls'
 
 TEMPLATES = [
     {
@@ -99,7 +99,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'gym_api.gym_api.wsgi.application'
+WSGI_APPLICATION = 'gym_api.wsgi.application'
 
 
 # Database
