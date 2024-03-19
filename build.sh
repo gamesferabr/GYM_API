@@ -14,7 +14,7 @@ export DJANGO_SETTINGS_MODULE="gym_api.gym_api.settings"
 
 # Inicia o Cloud SQL Proxy em background
 # Torna o Cloud SQL Proxy executável
-chmod +x ./gym_api/cloud-sql-proxy
+chmod +x ./gym_api/cloud-sql-proxy.exe
 
 # Inicia o Cloud SQL Proxy em background
 ./gym_api/cloud-sql-proxy -instances=${DB_CONNECTION_NAME}=tcp:5432 &
