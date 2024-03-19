@@ -30,7 +30,7 @@ DEBUG = False
 ALLOWED_HOSTS = [
     'localhost',
     '127.0.0.1',
-    'frontendgymapi.vercel.app',
+    'frontendgymapi.vercel.app/',
 ]
 
 SECURE_SSL_REDIRECT = True
@@ -184,8 +184,7 @@ REST_FRAMEWORK = {
 
 
 CORS_ALLOWED_ORIGINS = [
-    'https://frontendgymapi.vercel.app',
-    
+    'https://frontendgymapi.vercel.app/',
 ]
 
 CORS_ALLOW_HEADERS = [
