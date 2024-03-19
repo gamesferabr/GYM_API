@@ -113,16 +113,20 @@ WSGI_APPLICATION = 'gym_api.gym_api.wsgi.application'
 #     }
 # }
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'postgres_new',
-        'USER': 'postgres_new',
-        'PASSWORD': 'PKp7nYu#_%~}1K2I',
-        'HOST': '127.0.0.1',
-        'PORT': '5432',
+import os
+import dj_database_url
+
+DEBUG = os.environ.get('DEBUG', 'on') == 'on'  # Exemplo de como você pode configurar a variável DEBUG
+
+if not DEBUG:
+    DATABASES = {'default': dj_database_url.parse(os.environ.get('DATABASE_URL'))}
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': 'db.sqlite3',
+        }
     }
-}
 
 AUTH_USER_MODEL = 'users.CustomUser'
 
