@@ -26,8 +26,5 @@ source ./venv/Scripts/activate
 # Instala dependências
 pip install -r requirements.txt
 
-# Inicia o servidor Django (ajuste conforme necessário, por exemplo, usando gunicorn)
-gunicorn gym_api.gym_api.wsgi:application
-
 # Para encerrar o Cloud SQL Proxy quando o script terminar
 trap "kill $!" EXIT
