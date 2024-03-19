@@ -28,7 +28,7 @@ DEBUG = False
 
 import os
 
-ALLOWED_HOSTS = os.getenv('DJANGO_ALLOWED_HOSTS', 'localhost').split(',')
+ALLOWED_HOSTS = os.getenv('DJANGO_ALLOWED_HOSTS', 'localhost','https://frontendgymapi.vercel.app/template/login.html','https://frontendgymapi.vercel.app/').split(',')
 
 SECURE_SSL_REDIRECT = True
 SESSION_COOKIE_SECURE = True
