@@ -124,7 +124,7 @@ DATABASES = {
     }
 }
 
-AUTH_USER_MODEL = 'users.CustomUser'
+AUTH_USER_MODEL = 'gym_api.gym_api.apps.users.CustomUser'
 
 
 # Password validation
@@ -186,7 +186,7 @@ REST_FRAMEWORK = {
 
 CORS_ALLOWED_ORIGINS = [
     'https://frontendgymapi.vercel.app',
-
+    'gym-api-930w.onrender.com'
 ]
 
 CORS_ALLOW_HEADERS = [
