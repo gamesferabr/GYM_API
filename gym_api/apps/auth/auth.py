@@ -1,5 +1,5 @@
 from rest_framework.permissions import BasePermission
-from gym_api.apps.users.tokens import get_user_for_tokens, get_tokens_for_user
+from apps.users.tokens import get_user_for_tokens, get_tokens_for_user
 from django.http import HttpRequest, JsonResponse
 
 # Adapte a classe IsAuth para funcionar com Django Ninja

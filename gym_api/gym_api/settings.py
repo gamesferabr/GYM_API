@@ -57,17 +57,16 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'gym_api.apps.users',
+    'apps.users',
     'ninja',
     'rest_framework',
     'rest_framework_simplejwt',
     'rest_framework_simplejwt.token_blacklist',
     'drf_yasg',
-    'gym_api.apps.workout',
-    'gym_api.apps.diets',
+    'apps.workout',
+    'apps.diets',
     'corsheaders',
     'sslserver',
-
 ]
 
 MIDDLEWARE = [

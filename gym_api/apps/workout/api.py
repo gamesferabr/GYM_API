@@ -3,8 +3,8 @@ from .models import Workout
 from .schemas import WorkoutIn, WorkoutOut
 from typing import List
 from django.http import Http404,HttpRequest
-from gym_api.apps.auth.auth import is_auth_ninja
-from gym_api.apps.users.tokens import get_user_for_tokens
+from apps.auth.auth import is_auth_ninja
+from apps.users.tokens import get_user_for_tokens
 
 router = Router()
 
