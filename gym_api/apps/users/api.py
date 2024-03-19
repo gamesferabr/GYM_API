@@ -2,7 +2,7 @@ from ninja import Router
 from gym_api.apps.users.models import CustomUser
 from gym_api.apps.users.schemas import UserCreateSchema, AuthSchema
 from django.contrib.auth import authenticate
-from apps.users.tokens import get_tokens_for_user, RefreshToken
+from gym_api.apps.users.tokens import get_tokens_for_user, RefreshToken
 from django.http import JsonResponse
 from django.http import HttpRequest, JsonResponse
 from gym_api.apps.auth.auth import is_auth_ninja
