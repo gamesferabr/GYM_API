@@ -31,7 +31,7 @@ ALLOWED_HOSTS = [
     'localhost',
     '127.0.0.1',
     'frontendgymapi.vercel.app',
-    'gymapi.vercel.app',
+    'gym-api-930w.onrender.com',
 ]
 
 SECURE_SSL_REDIRECT = True
