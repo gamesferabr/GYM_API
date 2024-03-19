@@ -17,7 +17,7 @@ export DJANGO_SETTINGS_MODULE="gym_api.gym_api.settings"
 chmod +x ./gym_api/cloud_sql_proxy.linux.amd64
 
 # Inicia o Cloud SQL Proxy em background
-./gym_api/cloud_sql_proxy ${DB_CONNECTION_NAME} &
+./gym_api/cloud_sql_proxy.linux.amd64 ${DB_CONNECTION_NAME} &
 
 # Ativa o ambiente virtual
 source ./venv/Scripts/activate
