@@ -119,7 +119,7 @@ DATABASES = {
         'NAME': 'postgres_new',
         'USER': 'postgres_new',
         'PASSWORD': 'PKp7nYu#_%~}1K2I',
-        'HOST': '127.0.0.1',
+        'HOST': '35.238.126.55',
         'PORT': '5432',
     }
 }

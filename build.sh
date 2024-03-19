@@ -18,7 +18,7 @@ chmod +x ./gym_api/cloud_sql_proxy.linux.amd64
 
 
 # Inicia o Cloud SQL Proxy em background
-./gym_api/cloud_sql_proxy.linux.amd64 -instances=${DB_CONNECTION_NAME}=tcp:5432 &
+./gym_api/cloud_sql_proxy.linux.amd64 ${DB_CONNECTION_NAME} &
 
 # Ativa o ambiente virtual
 source ./venv/Scripts/activate
