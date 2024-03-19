@@ -98,7 +98,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'gym_api.wsgi.application'
+WSGI_APPLICATION = 'gymapi.wsgi.application'
 
 
 # Database
