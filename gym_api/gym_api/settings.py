@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 
 from pathlib import Path
 from datetime import timedelta
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -26,9 +27,11 @@ SECRET_KEY = 'django-insecure-cypkvo++so(u@x09w$&b*6f81+9-z6a&2)$7v5#v_gnzt%ey7)
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-import os
-
-ALLOWED_HOSTS = os.getenv('DJANGO_ALLOWED_HOSTS', 'localhost','https://frontendgymapi.vercel.app/template/login.html','https://frontendgymapi.vercel.app/').split(',')
+ALLOWED_HOSTS = [
+    'localhost',
+    'https://frontendgymapi.vercel.app/template/login.html',
+    'https://frontendgymapi.vercel.app/',
+]
 
 SECURE_SSL_REDIRECT = True
 SESSION_COOKIE_SECURE = True
