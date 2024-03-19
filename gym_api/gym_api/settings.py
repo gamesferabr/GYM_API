@@ -29,8 +29,8 @@ DEBUG = False
 
 ALLOWED_HOSTS = [
     'localhost',
-    'https://frontendgymapi.vercel.app/template/login.html',
-    'https://frontendgymapi.vercel.app/',
+    '127.0.0.1',
+    'frontendgymapi.vercel.app',
 ]
 
 SECURE_SSL_REDIRECT = True
@@ -182,7 +182,6 @@ REST_FRAMEWORK = {
     ),
 }
 
-CORS_ALLOW_ALL_ORIGINS = False
 
 CORS_ALLOWED_ORIGINS = [
     'https://frontendgymapi.vercel.app',
