@@ -80,7 +80,7 @@ MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware',
 ]
 
-ROOT_URLCONF = 'gym_api.urls'
+ROOT_URLCONF = 'gymapi.urls'
 
 TEMPLATES = [
     {
