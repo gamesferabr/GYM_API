@@ -1,7 +1,7 @@
 from django.http import Http404,HttpRequest, HttpResponseBadRequest
 from ninja import Router,Path
-from .models import Diet
-from .schemas import DietIn, DietOut
+from gym_api.apps.diets.models import Diet
+from gym_api.apps.diets.schemas import DietIn, DietOut
 from typing import List
 from gym_api.apps.auth.auth import is_auth_ninja
 from gym_api.apps.users.tokens import get_user_for_tokens

@@ -4,7 +4,7 @@ import jwt
 from django.conf import settings
 from gym_api.apps.users.models import CustomUser
 from gym_api.apps.users.tokens import get_tokens_for_user
-from .schemas import TokenRefreshSchema, TokenResponseSchema
+from gym_api.apps.token.schemas import TokenRefreshSchema, TokenResponseSchema
 
 router = Router()
 
