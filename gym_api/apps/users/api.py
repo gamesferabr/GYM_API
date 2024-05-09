@@ -1,18 +1,18 @@
 from ninja import Router
-from gym_api.apps.users.models import CustomUser
-from gym_api.apps.users.schemas import UserCreateSchema, AuthSchema
+from apps.users.models import CustomUser
+from apps.users.schemas import UserCreateSchema, AuthSchema
 from django.contrib.auth import authenticate
-from gym_api.apps.users.tokens import get_tokens_for_user, RefreshToken
+from apps.users.tokens import get_tokens_for_user, RefreshToken
 from django.http import JsonResponse
 from django.http import HttpRequest, JsonResponse
-from gym_api.apps.auth.auth import is_auth_ninja
+from apps.auth.auth import is_auth_ninja
 from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
 from django.db import transaction
 from django.db import IntegrityError
+from django.contrib.auth.decorators import login_required
 
 router = Router()
-
 
 @router.post("/users", response={201: None})
 def create_user(request: HttpRequest, payload: UserCreateSchema):
@@ -77,15 +77,14 @@ def login(request: HttpRequest, auth: AuthSchema):
         return JsonResponse({"detail": e.messages}, status=400)
     
     
-@router.post('/logout/{access_token}', auth=is_auth_ninja, response={200: None})
-def logout(request: HttpRequest, access_token):
+@router.post('/logout/', response={200: None})
+@is_auth_ninja
+def logout(request: HttpRequest):
     try:
         refresh_token = request.COOKIES.get('refresh_token')
         
-        if access_token is None:
-            return JsonResponse({"error": "No refresh token provided."}, status=400)
-
-        RefreshToken(refresh_token).blacklist()
+        token = RefreshToken(refresh_token)
+        token.blacklist()
         
         response = JsonResponse({"success": True, "message": "Logout successful."}, status=200)
         
@@ -98,15 +97,15 @@ def logout(request: HttpRequest, access_token):
         return JsonResponse({"error": "Invalid token or other error."}, status=400)
 
 
-@router.post('/dashboard/{token}',auth=is_auth_ninja, response={200:None})
-def dashboard(request: HttpRequest, token:str):
-    try:
-        if token:
-            response = JsonResponse({"success":True, "message": "Dashboard successful"}, status = 200)
-            return response
+@router.post('/dashboard/', response={200:None})
+@is_auth_ninja
+def dashboard(request: HttpRequest):
+    try:        
+        # if not request.COOKIES.get('access_token'):
+        #     return JsonResponse({"error": "No token provided."}, status=400)
         
-        else:
-            return JsonResponse({"error":"No token provided."}, status=400)
-    
+        response = JsonResponse({"success":True, "message": "Dashboard successful"}, status = 200)
+        return response
+
     except Exception as e:
         return({"error":"Invalid token"})

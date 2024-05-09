@@ -1,21 +1,22 @@
 from django.http import Http404,HttpRequest, HttpResponseBadRequest
 from ninja import Router,Path
-from gym_api.apps.diets.models import Diet
-from gym_api.apps.diets.schemas import DietIn, DietOut
+from apps.diets.models import Diet
+from apps.diets.schemas import DietIn, DietOut
 from typing import List
-from gym_api.apps.auth.auth import is_auth_ninja
-from gym_api.apps.users.tokens import get_user_for_tokens
+from apps.auth.auth import is_auth_ninja
+from apps.users.tokens import get_user_for_tokens
 from django.utils import timezone
 from datetime import datetime
 
 router = Router()
 
-@router.post("/add/{token}", response=DietOut, auth=is_auth_ninja)
-def add_diet(request:HttpRequest, diet_in: DietIn,token:str):
-        
-    user = get_user_for_tokens(token)
-    
+@router.post("/add/", response=DietOut, auth=is_auth_ninja)
+@is_auth_ninja
+def add_diet(request:HttpRequest, diet_in: DietIn):    
     try:
+            token = request.COOKIES.get("access_token")
+            user = get_user_for_tokens(token)
+            
             diet = Diet.objects.create(**diet_in.dict(), user=user)
             return diet
     except Exception as e:

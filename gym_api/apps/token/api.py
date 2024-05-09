@@ -1,25 +1,21 @@
 from django.http import HttpRequest
 from ninja import Router
-import jwt
-from django.conf import settings
-from gym_api.apps.users.models import CustomUser
-from gym_api.apps.users.tokens import get_tokens_for_user
-from gym_api.apps.token.schemas import TokenRefreshSchema, TokenResponseSchema
-
+from apps.users.tokens import get_tokens_for_user, get_new_access_token, get_user_for_tokens
+from apps.token.schemas import TokenRefreshSchema, TokenResponseSchema
+from apps.auth.auth import is_auth_ninja
 router = Router()
 
 @router.post("/token/refresh", response=TokenResponseSchema)
-def refresh_token(request: HttpRequest, data: TokenRefreshSchema):
+@is_auth_ninja
+def refresh_token(request: HttpRequest):
     try:
-        # Decodifica o refresh_token para obter o id do usuário
-        payload = jwt.decode(data.refresh, settings.SECRET_KEY, algorithms=["HS256"])
-        user_id = payload["user_id"]
-        user = CustomUser.objects.get(id=user_id)
-
-        # Gera novos tokens
-        tokens = get_tokens_for_user(user)
+        refresh_token = request.COOKIES.get("refresh_token")
+        access = get_new_access_token(refresh_token)
         
-        return {"access": tokens["access"]}
+        if not access:
+            raise Exception("Invalid token")
+        
+        return {"access": access}
     
     except Exception as e:
         return {"error": str(e)}

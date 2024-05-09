@@ -25,7 +25,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-cypkvo++so(u@x09w$&b*6f81+9-z6a&2)$7v5#v_gnzt%ey7)'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = [
     'localhost',
@@ -34,7 +34,7 @@ ALLOWED_HOSTS = [
     'gym-api-930w.onrender.com',
 ]
 
-SECURE_SSL_REDIRECT = True
+SECURE_SSL_REDIRECT = False
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
 
@@ -48,6 +48,8 @@ SWAGGER_SETTINGS = {
     }
 }
 
+SHOW_SWAGGER = True
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -56,14 +58,15 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-    'gym_api.apps.users',
+    'django.contrib.staticfiles',
+    'apps.users',
     'ninja',
     'rest_framework',
     'rest_framework_simplejwt',
     'rest_framework_simplejwt.token_blacklist',
     'drf_yasg',
-    'gym_api.apps.workout',
-    'gym_api.apps.diets',
+    'apps.workout',
+    'apps.diets',
     'corsheaders',
     'sslserver',
 ]
@@ -80,7 +83,7 @@ MIDDLEWARE = [
     'django.middleware.common.CommonMiddleware',
 ]
 
-ROOT_URLCONF = 'gym_api.gym_api.urls'
+ROOT_URLCONF = 'gym_api.urls'
 
 TEMPLATES = [
     {
@@ -98,7 +101,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'gym_api.gym_api.wsgi.application'
+WSGI_APPLICATION = 'gym_api.wsgi.application'
 
 
 # Database
@@ -217,7 +220,8 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
-# STATIC_URL = 'static/'
+STATIC_URL = 'static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field

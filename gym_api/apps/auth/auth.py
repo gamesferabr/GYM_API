@@ -1,28 +1,30 @@
-from rest_framework.permissions import BasePermission
-from gym_api.apps.users.tokens import get_user_for_tokens, get_tokens_for_user
+from rest_framework_simplejwt.tokens import AccessToken, TokenError
 from django.http import HttpRequest, JsonResponse
+from functools import wraps
 
-# Adapte a classe IsAuth para funcionar com Django Ninja
 class IsAuthNinja:
-    message = "Você não tem permissão para executar essa ação"
-    
+    message = "Unauthorized"  # Mensagem de erro padrão
+
     @staticmethod
-    def check(token:str):
-        jwt_token = token        
-        user = get_user_for_tokens(jwt_token)
-        
-        get_token = get_tokens_for_user(user)
-        
-        if jwt_token != get_token['access'] or not token:
-            return JsonResponse({'message': 'Você não tem permissão para executar essa ação'}, status=401)
-        
-        return jwt_token
+    def check(token: str):
+        if not token:
+            raise ValueError(IsAuthNinja.message)  # Se não houver token, lança uma exceção.
 
-# Defina uma função de autenticação para usar com o decorador auth=
-def is_auth_ninja(request:HttpRequest):
-    token = request.COOKIES.get('access_token')
+        try:
+            # Verifica se o token é válido usando rest_framework_simplejwt
+            AccessToken(token)  # Isso levantará uma exceção se o token for inválido ou expirado.
+            return True
+        
+        except TokenError as e:
+            raise ValueError(IsAuthNinja.message)
 
-    if not token or not IsAuthNinja.check(token):
-        return JsonResponse({'message': 'Você não tem permissão para executar essa ação'}, status=401)
-    
-    return IsAuthNinja.check(token)
+def is_auth_ninja(func):
+    @wraps(func)
+    def wrapper(request: HttpRequest, *args, **kwargs):
+        token = request.COOKIES.get("access_token")
+        try:
+            IsAuthNinja.check(token)
+            return func(request, *args, **kwargs)
+        except ValueError as e:
+            return JsonResponse({'message': str(e)}, status=401)
+    return wrapper
